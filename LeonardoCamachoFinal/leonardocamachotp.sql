@@ -1,33 +1,67 @@
-create database leonardocamachotp;
-use leonardocamachotp;
+-- Eliminar la base anterior si existe
+-- DROP DATABASE IF EXISTS leonardocamachotp;
 
+-- Crear base de datos
+CREATE DATABASE leonardocamachotp;
+USE leonardocamachotp;
 
+-- Crear tabla de roles
+CREATE TABLE roles (
+    id TINYINT(4) PRIMARY KEY,
+    rol VARCHAR(30)
+);
 
--- Tablas
-create table roles(
-rol tinyint primary key,
-descripcion varchar(20));
+-- Crear tabla de usuarios
+CREATE TABLE usuarios (
+    idUsuario INT(11) AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30),
+    apellido VARCHAR(30),
+    usuario VARCHAR(30) UNIQUE,
+    pass VARCHAR(30),
+    rol TINYINT(4),
+    FOREIGN KEY (rol) REFERENCES roles(id)
+);
 
-create table usuarios(
-id int auto_increment primary key,
-nombre varchar(20),
-apellido varchar(20),
-usuario varchar(20),
-pass varchar(20),
-unique(usuario),
-rol tinyint,
-foreign key(rol) references roles(rol));
+-- Crear tabla de estados
+CREATE TABLE estados (
+    id TINYINT(4) PRIMARY KEY,
+    estado VARCHAR(30)
+);
 
--- Insertar datos a tablas
+-- Crear tabla de mensajes
+CREATE TABLE mensajes (
+    idMensaje INT(11) AUTO_INCREMENT PRIMARY KEY,
+    de INT(11),
+    para INT(11),
+    asunto VARCHAR(40),
+    mensaje VARCHAR(500),
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    origen INT(11),
+    estado TINYINT(4),
+    FOREIGN KEY (de) REFERENCES usuarios(idUsuario),
+    FOREIGN KEY (para) REFERENCES usuarios(idUsuario),
+    FOREIGN KEY (estado) REFERENCES estados(id)
+);
+
+-- Insertar datos de ejemplo
 -- ROLES
-insert into roles values(1,"administrador"),(2,"usuario");
+INSERT INTO roles VALUES 
+(1, 'administrador'),
+(2, 'usuario');
 
 -- USUARIOS
-insert into usuarios values 
-(null, "Leonardo","Camacho","Leonardosky","123456",1),
-(null, "Diela","LeonaD","Diela_","123456",2),
-(null, "Rafa","Gomez","ElRafael","123456",2),
-(null, "Sandia","Diver","SeniorSandia","123456",2);
+INSERT INTO usuarios VALUES 
+(NULL, 'Leonardo','Camacho','Leonardosky','123456',1),
+(NULL, 'Diela','LeonaD','Diela_','123456',2),
+(NULL, 'Rafa','Gomez','ElRafael','123456',2),
+(NULL, 'Sandia','Diver','SeniorSandia','123456',2);
 
--- VER DATOS CARGADOS
-select * from usuarios;
+-- ESTADOS
+INSERT INTO estados VALUES 
+(1, 'No leído'),
+(2, 'Leído'),
+(3, 'Archivado'),
+(4, 'Eliminado');
+
+-- Consulta para verificar datos
+SELECT * FROM usuarios;
